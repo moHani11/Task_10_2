@@ -14,6 +14,8 @@
 #define PORT_7 0x80
 
 #define set_bit(REGISTER, PORT) REGISTER |= PORT 
+#define set_predefined_bit(REGISTER, PREDEF_PORT) REGISTER |=(1 << PREDEF_PORT)
+
 #define clear_bit(REGISTER, PORT) REGISTER &= ~(PORT)
 
 #endif	/* XC_HEADER_TEMPLATE_H */
