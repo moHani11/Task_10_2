@@ -15,8 +15,13 @@
 
 #define set_bit(REGISTER, PORT) REGISTER |= PORT 
 #define set_predefined_bit(REGISTER, PREDEF_PORT) REGISTER |=(1 << PREDEF_PORT)
-
 #define clear_bit(REGISTER, PORT) REGISTER &= ~(PORT)
+
+void init_PWM(void);
+void update_pwm(int duty_cycle);
+void settingAdcPin(void);
+int get_adc_reading();
+
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 

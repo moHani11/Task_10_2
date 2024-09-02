@@ -1,6 +1,34 @@
 #include <xc.h>
 #include "headerfile.h"
 
+
+int com1A1 = PORT_7;  // register: TCCR1A
+int com1A0 = PORT_6;  // register: TCCR1A
+int wgm12 = PORT_3 ;  // register: TCCR1B
+int wgm11 = PORT_1 ; // register: TCCR1A
+int wgm10 = PORT_0 ; // register: TCCR1A
+int cs10 = PORT_0;  // register: TCCR1B
+
+void init_PWM(void){
+    
+    set_bit(DDRB, PORT_1);
+
+    clear_bit(TCCR1A, com1A0);
+    set_bit(TCCR1A, com1A1);
+
+    set_bit(TCCR1B, wgm12);
+    set_bit(TCCR1A, wgm10);
+    set_bit(TCCR1A, wgm11);
+           
+//    OCR1A = 1024;
+    set_bit(TCCR1B, cs10);
+}
+
+void update_pwm(int duty_cycle){
+   OCR1A = duty_cycle;
+} 
+
+
 void settingAdcPin(void){
     
     //setting REFS0 to 1 make the ADC Vrefrence to  AVCC with external capacitor at AREF pin
@@ -19,16 +47,18 @@ void settingAdcPin(void){
     
 }
 
+int get_adc_reading(){   return (ADCL + ADCH* 256);  }
+
 void main(void) {
 
-settingAdcPin();
-
+    init_PWM();
+    settingAdcPin();
+    int adc_reading ;
     
     while(1){
-        set_predefined_bit(ADCSRA, ADATE); // keeps toggeling the ADATE bit to keep reading the input analog value and keep updating the data register
-        
+      set_predefined_bit(ADCSRA, ADATE); // keeps toggeling the ADATE bit to keep reading the input analog value and keep updating the data register
+        adc_reading = get_adc_reading();
+        update_pwm(adc_reading);
     }
-
-
     return;
 }
